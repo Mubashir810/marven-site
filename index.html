@@ -78,13 +78,16 @@ h2{font-size:clamp(24px,4.6vw,44px);letter-spacing:.1em;line-height:1.25;margin:
 @media(min-width:980px){.parts{grid-template-columns:1fr}}
 .part{padding:12px}.part .crop{aspect-ratio:1.6;width:100%}
 .part b{display:block;margin-top:12px;font:500 12px var(--d);letter-spacing:.16em}.part span{font-size:10.5px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase}
-.stage{position:relative;display:grid;place-items:center;min-height:560px}
-.stage::before{content:"";position:absolute;width:min(90%,440px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 30%,#e9edf1,#bcc4cc);opacity:.6;top:0}
-.full{position:relative;width:min(88%,400px);aspect-ratio:941/1672;background:var(--m) center/100% 100% no-repeat;mix-blend-mode:multiply}
-.call{display:flex;position:absolute;font:500 11px var(--d);letter-spacing:.14em;align-items:center;gap:10px;right:0;z-index:3}
-.call i{display:block;width:clamp(55px,8vw,100px);height:1px;background:var(--ink);opacity:.5;flex:none}.call span{display:block;min-width:72px}.call small{display:block;font:400 9px var(--b);letter-spacing:.24em;color:var(--mute);margin-top:2px}.c1{top:7%}.c2{top:28%}.c3{top:48%}.c4{top:82%}
-@media(min-width:900px){.stage::before{top:50%;left:50%;transform:translate(-50%,-50%)}.call{right:0}.call i{width:clamp(70px,8vw,110px)}}
-@media(max-width:899px){.call{display:none;gap:6px;font-size:9px;letter-spacing:.08em}.call i{width:42px;opacity:.45}.call span{min-width:64px;padding:5px 7px;border:1px solid rgba(150,162,174,.28);border-radius:8px;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}.call small{font-size:7px;letter-spacing:.12em}.stage{min-height:560px}}
+.stage{position:relative;display:grid;place-items:center}
+.figbox{position:relative;width:min(88%,400px);aspect-ratio:941/1672;container-type:inline-size;direction:ltr}
+.figbox::before{content:"";position:absolute;left:50%;top:-1cqw;width:102cqw;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 30% 30%,#e9edf1,#bcc4cc);opacity:.6}
+.full{position:absolute;inset:0;background:var(--m) center/100% 100% no-repeat;mix-blend-mode:multiply}
+.call{display:flex;align-items:center;position:absolute;z-index:3;margin:0;left:var(--x);top:var(--y);width:calc(114cqw - var(--x));transform:translateY(-50%);font:500 12px var(--d);letter-spacing:.14em}
+.call i{display:block;flex:1 1 0;height:1px;background:rgba(20,24,29,.5)}
+.call span{display:block;flex:none;box-sizing:border-box;min-width:22cqw;padding:7px 10px;border:1px solid rgba(150,162,174,.5);border-radius:12px;background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 6px 18px rgba(20,24,29,.1);text-transform:uppercase}
+.call small{display:block;font:400 9px var(--b);letter-spacing:.24em;color:var(--mute);margin-top:2px;text-transform:uppercase}
+.c1{--x:66cqw;--y:17.8cqw}.c3{--x:80cqw;--y:51.5cqw}.c2{--x:81cqw;--y:97.7cqw}.c4{--x:82cqw;--y:161.7cqw}
+@media(max-width:600px){.figbox{width:min(74%,400px);justify-self:start;margin-left:2%}.call{font-size:9px;letter-spacing:.08em}.call span{padding:4px 6px;border-radius:9px}.call small{font-size:6.5px;letter-spacing:.12em;margin-top:1px}}
 .info{padding:18px}.info .crop{aspect-ratio:200/222;width:100%}
 .info h3{font-size:13px;letter-spacing:.14em;margin:18px 0 8px}
 .info dl{display:grid;grid-template-columns:1fr auto;font-size:10.5px;letter-spacing:.16em;color:var(--mute)}
@@ -288,7 +291,6 @@ html[lang] .brand{letter-spacing:.34em!important}html[lang] .htxt h1{letter-spac
 @media(max-width:820px){html[lang] .brand{letter-spacing:.26em!important}}
 html[lang=ur] body{line-height:2.1}html[lang=ur] h2,html[lang=ur] h3,html[lang=ur] .sub,html[lang=ur] .stmt{line-height:2}html[lang=ur] .sysgrid h2 span{line-height:2;padding:.1em 0}
 [dir=rtl] .sys.bl{left:auto;right:var(--pad)}[dir=rtl] .sys.tr{right:auto;left:var(--pad);text-align:right}[dir=rtl] .sys.br{right:auto;left:var(--pad);text-align:left}
-[dir=rtl] .call{right:auto;left:0}
 [dir=rtl] .info dd{text-align:left}[dir=rtl] .gar.n svg{transform:none}[dir=rtl] .gar.p svg{transform:scaleX(-1)}[dir=rtl] .btn.p svg{transform:scaleX(-1)}[dir=rtl] .tc::before,[dir=rtl] .tc::after{right:auto;left:12px}
 @media(min-width:821px){[dir=rtl] .hchar{right:auto;left:-4vw;transform:translateX(10vw)}}
 @media(max-width:820px){[dir=rtl] .sys.bl{right:auto}}
@@ -343,11 +345,9 @@ html[lang=ur] body{line-height:2.1}html[lang=ur] h2,html[lang=ur] h3,html[lang=u
 </div>
 </div>
 <div class="stage" role="group" aria-label="MARVEN character design sheet">
-<div class="full" role="img" aria-label="Full-body MARVEN in black tactical suit, gloves, straps and boots"></div>
-<p class="call c1"><i></i><span>01<small data-t="helmet">HELMET</small></span></p>
-<p class="call c2"><i></i><span>02<small data-t="gloves">GLOVES</small></span></p>
-<p class="call c3"><i></i><span>03<small data-t="suit">SUIT</small></span></p>
-<p class="call c4"><i></i><span>04<small data-t="foot">FOOTWEAR</small></span></p>
+<div class="figbox"><div class="full" role="img" aria-label="Full-body MARVEN in black tactical suit, gloves, straps and boots"></div>
+<p class="call c1"><i></i><span>01<small data-t="helmet">HELMET</small></span></p><p class="call c2"><i></i><span>02<small data-t="gloves">GLOVES</small></span></p><p class="call c3"><i></i><span>03<small data-t="suit">SUIT</small></span></p><p class="call c4"><i></i><span>04<small data-t="foot">FOOTWEAR</small></span></p>
+</div>
 </div>
 <div>
 <div class="info tc"><div class="crop" style="background-size:470%;background-position:50% 6.2%" role="img" aria-label="MARVEN face behind the visor"></div>
