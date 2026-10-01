@@ -82,9 +82,9 @@ h2{font-size:clamp(24px,4.6vw,44px);letter-spacing:.1em;line-height:1.25;margin:
 .stage::before{content:"";position:absolute;width:min(90%,440px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 30% 30%,#e9edf1,#bcc4cc);opacity:.6;top:0}
 .full{position:relative;width:min(88%,400px);aspect-ratio:941/1672;background:var(--m) center/100% 100% no-repeat;mix-blend-mode:multiply}
 .call{display:flex;position:absolute;font:500 11px var(--d);letter-spacing:.14em;align-items:center;gap:10px;right:0;z-index:3}
-.call i{display:block;width:clamp(55px,8vw,100px);height:1px;background:var(--ink);opacity:.5;flex:none}.call span{display:block;min-width:72px}.call small{display:block;font:400 9px var(--b);letter-spacing:.24em;color:var(--mute);margin-top:2px}.c1{top:7%}.c2{top:29%}.c3{top:52%}.c4{top:88%}
+.call i{display:block;width:clamp(55px,8vw,100px);height:1px;background:var(--ink);opacity:.5;flex:none}.call span{display:block;min-width:72px}.call small{display:block;font:400 9px var(--b);letter-spacing:.24em;color:var(--mute);margin-top:2px}.c1{top:7%}.c2{top:28%}.c3{top:48%}.c4{top:82%}
 @media(min-width:900px){.stage::before{top:50%;left:50%;transform:translate(-50%,-50%)}.call{right:0}.call i{width:clamp(70px,8vw,110px)}}
-@media(max-width:899px){.call{right:2%;gap:6px;font-size:9px;letter-spacing:.08em}.call i{width:42px;opacity:.45}.call span{min-width:64px;padding:5px 7px;border:1px solid rgba(150,162,174,.28);border-radius:8px;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}.call small{font-size:7px;letter-spacing:.12em}.stage{min-height:560px}}
+@media(max-width:899px){.call{display:none;gap:6px;font-size:9px;letter-spacing:.08em}.call i{width:42px;opacity:.45}.call span{min-width:64px;padding:5px 7px;border:1px solid rgba(150,162,174,.28);border-radius:8px;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}.call small{font-size:7px;letter-spacing:.12em}.stage{min-height:560px}}
 .info{padding:18px}.info .crop{aspect-ratio:200/222;width:100%}
 .info h3{font-size:13px;letter-spacing:.14em;margin:18px 0 8px}
 .info dl{display:grid;grid-template-columns:1fr auto;font-size:10.5px;letter-spacing:.16em;color:var(--mute)}
@@ -344,7 +344,10 @@ html[lang=ur] body{line-height:2.1}html[lang=ur] h2,html[lang=ur] h3,html[lang=u
 </div>
 <div class="stage" role="group" aria-label="MARVEN character design sheet">
 <div class="full" role="img" aria-label="Full-body MARVEN in black tactical suit, gloves, straps and boots"></div>
-<p class="call c1"><i></i><span>01<small data-t="helmet">HELMET</small></span></p><p class="call c2"><i></i><span>02<small data-t="gloves">GLOVES</small></span></p><p class="call c3"><i></i><span>03<small data-t="suit">SUIT</small></span></p><p class="call c4"><i></i><span>04<small data-t="foot">FOOTWEAR</small></span></p>
+<p class="call c1"><i></i><span>01<small data-t="helmet">HELMET</small></span></p>
+<p class="call c2"><i></i><span>02<small data-t="gloves">GLOVES</small></span></p>
+<p class="call c3"><i></i><span>03<small data-t="suit">SUIT</small></span></p>
+<p class="call c4"><i></i><span>04<small data-t="foot">FOOTWEAR</small></span></p>
 </div>
 <div>
 <div class="info tc"><div class="crop" style="background-size:470%;background-position:50% 6.2%" role="img" aria-label="MARVEN face behind the visor"></div>
