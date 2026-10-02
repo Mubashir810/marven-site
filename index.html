@@ -602,7 +602,7 @@ function applyContact(c){var email=c['contact.email']||MARVEN_FALLBACK.content['
 applyContact(MARVEN_FALLBACK.content);
 
 var MARVEN_SITE_CONTENT=Object.assign({},MARVEN_FALLBACK.content);
-function applySiteContent(){var c=MARVEN_SITE_CONTENT,stmt=document.querySelector('.hero .stmt');if(stmt){var a=c['hero.tagline_line_1']||MARVEN_FALLBACK.content['hero.tagline_line_1'],b=c['hero.tagline_line_2']||MARVEN_FALLBACK.content['hero.tagline_line_2'],d=c['hero.tagline_line_3']||MARVEN_FALLBACK.content['hero.tagline_line_3'];stmt.innerHTML='';[a,b,d].forEach(function(v,i){if(i)stmt.appendChild(document.createElement('br'));stmt.appendChild(document.createTextNode(v))})}maya.username=c['maya.username']||MARVEN_FALLBACK.content['maya.username'];maya.profileImage=c['maya.profile_image']||MARVEN_FALLBACK.content['maya.profile_image'];maya.heroImage=c['maya.hero_image']||MARVEN_FALLBACK.content['maya.hero_image'];maya.tiktokProfile=c['maya.tiktok_profile']||MARVEN_FALLBACK.content['maya.tiktok_profile'];maya.tiktokDM=c['maya.tiktok_dm']||MARVEN_FALLBACK.content['maya.tiktok_dm'];applyMaya();applyContact(c)}
+function applySiteContent(){var c=MARVEN_SITE_CONTENT,stmt=document.querySelector('.hero .stmt');/* disabled */maya.username=c['maya.username']||MARVEN_FALLBACK.content['maya.username'];maya.profileImage=c['maya.profile_image']||MARVEN_FALLBACK.content['maya.profile_image'];maya.heroImage=c['maya.hero_image']||MARVEN_FALLBACK.content['maya.hero_image'];maya.tiktokProfile=c['maya.tiktok_profile']||MARVEN_FALLBACK.content['maya.tiktok_profile'];maya.tiktokDM=c['maya.tiktok_dm']||MARVEN_FALLBACK.content['maya.tiktok_dm'];applyMaya();applyContact(c)}
 window.marvenDynamicApply=applySiteContent;
 
 (function(){
