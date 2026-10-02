@@ -602,7 +602,45 @@ function applyContact(c){var email=c['contact.email']||MARVEN_FALLBACK.content['
 applyContact(MARVEN_FALLBACK.content);
 
 var MARVEN_SITE_CONTENT=Object.assign({},MARVEN_FALLBACK.content);
-function applySiteContent(){var c=MARVEN_SITE_CONTENT,stmt=document.querySelector('.hero .stmt');/* disabled */maya.username=c['maya.username']||MARVEN_FALLBACK.content['maya.username'];maya.profileImage=c['maya.profile_image']||MARVEN_FALLBACK.content['maya.profile_image'];maya.heroImage=c['maya.hero_image']||MARVEN_FALLBACK.content['maya.hero_image'];maya.tiktokProfile=c['maya.tiktok_profile']||MARVEN_FALLBACK.content['maya.tiktok_profile'];maya.tiktokDM=c['maya.tiktok_dm']||MARVEN_FALLBACK.content['maya.tiktok_dm'];applyMaya();applyContact(c)}
+/* ---- 8 extra Supabase site_content keys (maya.bio + 7 image keys). Empty/missing/broken -> original hardcoded look is kept. ---- */
+function applyNewKeys(c){
+  try{
+    var okURL=function(u){u=(u||'').trim();return /^(https?:\/\/|data:image\/|\/)/i.test(u)?u.replace(/"/g,'%22'):''};
+    /* image set on a .crop-style element via background-image; original inline style is saved and restored if the key is emptied or the URL fails to load */
+    var setCrop=function(el,raw){
+      if(!el)return;
+      if(el._mvOrig===undefined)el._mvOrig=el.getAttribute('style');
+      var u=okURL(raw);el._mvWant=u;
+      if(!u){if(el._mvUrl){if(el._mvOrig===null)el.removeAttribute('style');else el.setAttribute('style',el._mvOrig);el._mvUrl=''}return}
+      if(el._mvUrl===u)return;
+      var im=new Image();
+      im.onload=function(){if(el._mvWant!==u)return;el.style.backgroundImage='url("'+u+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.style.backgroundRepeat='no-repeat';el._mvUrl=u};
+      im.onerror=function(){if(el._mvWant!==u)return;if(el._mvUrl){if(el._mvOrig===null)el.removeAttribute('style');else el.setAttribute('style',el._mvOrig);el._mvUrl=''}};
+      im.src=u;
+    };
+    /* maya.bio */
+    var bio=document.querySelector('.mdesc');
+    if(bio){var b=(c['maya.bio']||'').trim();
+      if(b){if(bio.textContent!==b)bio.textContent=b;bio.dataset.mvBio='1'}
+      else if(bio.dataset.mvBio){delete bio.dataset.mvBio;var L=I18N[document.documentElement.lang]||I18N.en;if(L&&L.mDesc!=null)bio.innerHTML=L.mDesc}}
+    /* editing_system cards: helmet, gloves, suit, footwear */
+    var crops=document.querySelectorAll('.parts .part .crop');
+    ['editing_system.helmet_image','editing_system.gloves_image','editing_system.suit_image','editing_system.footwear_image'].forEach(function(k,i){setCrop(crops[i],c[k])});
+    /* about.character_image and marven_info.profile_image */
+    setCrop(document.querySelector('.aimg'),c['about.character_image']);
+    setCrop(document.querySelector('.info .crop'),c['marven_info.profile_image']);
+    /* ideas_visuals.image_url -> <img> inside .moonp, vector hidden only once the image has loaded */
+    var mp=document.querySelector('.moonp');
+    if(mp){var rock=mp.querySelector('.rock'),u2=okURL(c['ideas_visuals.image_url']),cur=mp.querySelector('img.mvimg');mp._mvWant=u2;
+      var clear=function(){if(cur)cur.remove();if(rock)rock.style.display=''};
+      if(!u2)clear();
+      else if(!(cur&&cur.getAttribute('src')===u2)){var im2=new Image();
+        im2.onload=function(){if(mp._mvWant!==u2)return;var o=mp.querySelector('img.mvimg');if(o)o.remove();im2.className='mvimg';im2.alt='';im2.draggable=false;im2.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block';mp.appendChild(im2);if(rock)rock.style.display='none'};
+        im2.onerror=function(){};
+        im2.src=u2}}
+  }catch(e){}
+}
+function applySiteContent(){var c=MARVEN_SITE_CONTENT,stmt=document.querySelector('.hero .stmt');/* disabled */maya.username=c['maya.username']||MARVEN_FALLBACK.content['maya.username'];maya.profileImage=c['maya.profile_image']||MARVEN_FALLBACK.content['maya.profile_image'];maya.heroImage=c['maya.hero_image']||MARVEN_FALLBACK.content['maya.hero_image'];maya.tiktokProfile=c['maya.tiktok_profile']||MARVEN_FALLBACK.content['maya.tiktok_profile'];maya.tiktokDM=c['maya.tiktok_dm']||MARVEN_FALLBACK.content['maya.tiktok_dm'];applyMaya();applyContact(c);applyNewKeys(c)}
 window.marvenDynamicApply=applySiteContent;
 
 (function(){
