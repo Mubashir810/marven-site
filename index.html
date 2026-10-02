@@ -644,8 +644,12 @@ function applySiteContent(){var c=MARVEN_SITE_CONTENT,stmt=document.querySelecto
 window.marvenDynamicApply=applySiteContent;
 
 (function(){
-  var api=window.SpinRollAPI, clientPromise=null, rtChannel=null;
-  function client(){try{return api&&typeof api.getClient==='function'?api.getClient():null}catch(e){return null}}
+  var clientPromise=null, rtChannel=null, ownClient=null;
+  /* SpinRollAPI is defined LATER in the file than this block, so it must be looked up at call time (not captured at load). Reuses the Lucky Draw client; builds its own only if that one is unavailable. */
+  function client(){
+    try{var api=window.SpinRollAPI;if(api&&typeof api.getClient==='function'){var c=api.getClient();if(c)return c}}catch(e){}
+    try{if(ownClient)return ownClient;var cfg=window.SPINROLL_CONFIG;if(window.supabase&&cfg&&cfg.url&&cfg.anonKey){ownClient=window.supabase.createClient(cfg.url,cfg.anonKey);return ownClient}}catch(e){}
+    return null}
   function loadAll(){var sb=client();if(!sb)return Promise.reject(new Error('shared Supabase client unavailable'));return Promise.all([
     sb.from('gifters').select('id,name,image_url,is_active,display_order,updated_at').order('display_order',{ascending:true}),
     sb.from('hosts').select('id,name,image_url,display_order,updated_at').order('display_order',{ascending:true}),
