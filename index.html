@@ -730,11 +730,6 @@ function applyNewKeys(c){
       if(bio){var b=(c['maya.bio']||'').trim();
         if(b){if(bio.textContent!==b)bio.textContent=b;bio.dataset.mvBio='1'}
         else if(bio.dataset.mvBio){delete bio.dataset.mvBio;var L=I18N[document.documentElement.lang]||I18N.en;if(L&&L.mDesc!=null)bio.innerHTML=L.mDesc}}
-      var crops=document.querySelectorAll('.parts .part .crop');
-      setCrop(crops[0],c['editing_system.helmet_image'],0);
-      setCrop(crops[1],c['editing_system.gloves_image'],1);
-      setCrop(crops[2],c['editing_system.suit_image'],2);
-      setCrop(crops[3],c['editing_system.footwear_image'],3);
       setCrop(document.querySelector('.aimg'),c['about.character_image'],4);
       setCrop(document.querySelector('.info .crop'),c['marven_info.profile_image'],5);
       var mp=document.querySelector('.moonp');
