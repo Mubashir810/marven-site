@@ -342,10 +342,10 @@ html[lang=ur] body{line-height:2.1}html[lang=ur] h2,html[lang=ur] h3,html[lang=u
 <p class="lbl" style="color:var(--ink)" data-t="built">Built for creators.</p>
 <p class="dim" style="margin-top:18px" data-t="sysP">MARVEN is not just a video editor, he's a complete editing system — where creativity meets technology.</p>
 <div class="parts">
-<div class="part tc"><div class="crop" style="background-size:362%;background-position:48.5% 4%"></div><b>01 / <bdi data-t="helmet">HELMET</bdi></b><span data-t="d1">Visor system · identity protocol</span></div>
-<div class="part tc"><div class="crop" style="background-size:362%;background-position:20.6% 57%"></div><b>02 / <bdi data-t="gloves">GLOVES</bdi></b><span data-t="d2">Precision control · editor input</span></div>
-<div class="part tc"><div class="crop" style="background-size:362%;background-position:55.8% 25%"></div><b>03 / <bdi data-t="suit">SUIT</bdi></b><span data-t="d3">Tactical gear · mobility &amp; protection</span></div>
-<div class="part tc"><div class="crop" style="background-size:192%;background-position:51% 97%"></div><b>04 / <bdi data-t="foot">FOOTWEAR</bdi></b><span data-t="d4">Stability system · all terrain</span></div>
+<div class="part tc"><div class="crop" style="background-image:url('https://ywplviryojztrjqdqrih.supabase.co/storage/v1/object/public/marven-public/20261002_195921.jpg');background-size:cover;background-position:center"></div><b>01 / <bdi data-t="helmet">HELMET</bdi></b><span data-t="d1">Visor system · identity protocol</span></div>
+<div class="part tc"><div class="crop" style="background-image:url('https://ywplviryojztrjqdqrih.supabase.co/storage/v1/object/public/marven-public/20261002_200303.jpg');background-size:cover;background-position:center"></div><b>02 / <bdi data-t="gloves">GLOVES</bdi></b><span data-t="d2">Precision control · editor input</span></div>
+<div class="part tc"><div class="crop" style="background-image:url('https://ywplviryojztrjqdqrih.supabase.co/storage/v1/object/public/marven-public/20261002_200657.jpg');background-size:cover;background-position:center"></div><b>03 / <bdi data-t="suit">SUIT</bdi></b><span data-t="d3">Tactical gear · mobility &amp; protection</span></div>
+<div class="part tc"><div class="crop" style="background-image:url('https://ywplviryojztrjqdqrih.supabase.co/storage/v1/object/public/marven-public/20261002_200949.jpg');background-size:cover;background-position:center"></div><b>04 / <bdi data-t="foot">FOOTWEAR</bdi></b><span data-t="d4">Stability system · all terrain</span></div>
 </div>
 </div>
 <div class="stage" role="group" aria-label="MARVEN character design sheet">
@@ -704,7 +704,7 @@ var MARVEN_SITE_CONTENT_META={};
 function applyNewKeys(c){
   try{
     var okURL=function(u){u=(u||'').trim();return /^(https?:\/\/|data:image\/|\/)/i.test(u)?u:''};
-    var keys=['editing_system.helmet_image','editing_system.gloves_image','editing_system.suit_image','editing_system.footwear_image','about.character_image','marven_info.profile_image','ideas_visuals.image_url'];
+    var keys=['about.character_image','marven_info.profile_image','ideas_visuals.image_url'];
     var token=++applyNewKeys._token;
     var jobs=keys.map(function(k){var u=okURL(c[k]);return {key:k,url:u,versioned:u?mvVersionedURL(u,MARVEN_SITE_CONTENT_META[k]):'',promise:u?mvPreload(mvVersionedURL(u,MARVEN_SITE_CONTENT_META[k])):Promise.resolve(false)}});
     Promise.all(jobs.map(function(x){return x.promise})).then(function(results){
