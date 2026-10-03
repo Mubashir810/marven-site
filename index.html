@@ -300,17 +300,6 @@ html[lang=ur] body{line-height:2.1}html[lang=ur] h2,html[lang=ur] h3,html[lang=u
 @media(min-width:821px) and (max-aspect-ratio:99/100){[dir=rtl] .hchar{left:auto;right:auto;transform:none}[dir=rtl] .sys.bl{right:auto}}
 @media(min-width:900px){[dir=rtl] .fgrid{text-align:right}[dir=rtl] .fr{text-align:left}}
 </style>
-<style id="mv-img-fx">
-/* image-loading polish: shimmer while loading, 400ms fade-in on load. Only touches containers/images fed from Supabase. */
-@keyframes mvshim{to{background-position:-200% 0}}
-.mv-fx{opacity:0;transition:opacity .4s ease-in-out}
-.mv-fx.mv-in{opacity:1}
-.mvcimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;border-radius:inherit;pointer-events:none}
-.mv-has{background-image:none!important}
-.mv-sk{background:linear-gradient(90deg,#e4e8ec 0%,#f4f6f8 50%,#e4e8ec 100%)!important;background-size:200% 100%!important;animation:mvshim 1.4s linear infinite!important}
-.moonp.mv-sk .rock,.moonp.mv-has .rock{visibility:hidden}
-@media(prefers-reduced-motion:reduce){.mv-sk{animation:none!important}.mv-fx{transition:none}}
-</style>
 </head>
 <body>
 <div id="boot" aria-hidden="true"><span>SYSTEM INITIALIZING</span><span>MARVEN_001</span><span>SYSTEM ONLINE</span></div>
@@ -558,22 +547,13 @@ var gifters=MARVEN_FALLBACK.gifters.slice(),gt=document.getElementById('gtrack')
 var PH='<svg viewBox="0 0 60 60" width="34" height="34" aria-hidden="true"><circle cx="30" cy="30" r="12" fill="none" stroke="currentColor" stroke-width="1"/><path d="M30 8v10M30 42v10M8 30h10M42 30h10" stroke="currentColor" stroke-width="1"/></svg>';
 function ph(g){var d=document.createElement('div');d.className='gph';d.setAttribute('role','img');d.setAttribute('aria-label',g.name);d.innerHTML=PH;return d}
 function validURL(v){return !!v&&v!=='#'&&v.trim()!==''}
-var MV_BOOT=Date.now();
-/* cache busting: ?v=<record updated_at>, or a per-page-load timestamp when none is known (stable within a visit so re-renders don't refetch) */
-function mvBust(u,ver){if(!u||!/^https?:\/\//i.test(u))return u;return u.replace(/#.*$/,'')+(u.indexOf('?')<0?'?':'&')+'v='+encodeURIComponent(ver||MV_BOOT)}
-/* shimmer on the container until the <img> fires onload, then fade the image in (call right after setting im.src) */
-function mvFade(im,box){var sk=function(on){if(box)box.classList.toggle('mv-sk',on)};
-  if(im.complete&&im.naturalWidth)return;
-  im.classList.add('mv-fx');sk(true);
-  im.addEventListener('load',function(){sk(false);requestAnimationFrame(function(){im.classList.add('mv-in')})});
-  im.addEventListener('error',function(){sk(false);im.classList.remove('mv-fx')})}
 function safeImage(el,url,alt,fallback){if(!validURL(url)){if(fallback)fallback();return}var im=new Image();im.alt=alt||'';im.loading='lazy';im.decoding='async';im.onerror=function(){if(fallback)fallback()};im.src=url;el.appendChild(im)}
 function renderGifters(list){
-  gifters=(Array.isArray(list)&&list.length?list:MARVEN_FALLBACK.gifters).map(function(g){return {name:g.name||'@unknown',image:g.image_url||g.image||'',ver:g.updated_at||g.ver||'',isActive:g.is_active!==false&&g.isActive!==false}});
+  gifters=(Array.isArray(list)&&list.length?list:MARVEN_FALLBACK.gifters).map(function(g){return {name:g.name||'@unknown',image:g.image_url||g.image||'',isActive:g.is_active!==false&&g.isActive!==false}});
   gt.innerHTML='';cs=[];gi=0;
   gifters.forEach(function(g,i){var c=document.createElement('article'),a=document.createElement('div'),n=document.createElement('b'),s=document.createElement('span'),x=document.createElement('bdi');
     c.className='gc';a.className='gav';
-    if(validURL(g.image)){var im=new Image();im.className='gph';im.alt=g.name+' profile picture';im.loading='lazy';im.onerror=function(){if(im.parentNode===a)a.replaceChild(ph(g),im)};im.src=mvBust(g.image,g.ver);a.appendChild(im);mvFade(im,a)}else a.appendChild(ph(g));
+    if(validURL(g.image)){var im=new Image();im.className='gph';im.alt=g.name+' profile picture';im.loading='lazy';im.onerror=function(){if(im.parentNode===a)a.replaceChild(ph(g),im)};im.src=g.image;a.appendChild(im)}else a.appendChild(ph(g));
     n.className='gn';n.textContent=g.name;s.className='gs'+(g.isActive?' on':'');s.appendChild(document.createElement('i'));x.dataset.t=g.isActive?'gAct':'gIn';x.textContent=g.isActive?'Active this week':'Inactive';s.appendChild(x);
     c.appendChild(a);c.appendChild(n);c.appendChild(s);c.onclick=function(){go(i)};gt.appendChild(c);cs.push(c);
   });
@@ -593,8 +573,8 @@ renderGifters(gifters);
   var W=MARVEN_FALLBACK.wallpapers.slice(),S=document.getElementById('wstage'),P=document.getElementById('wprev'),N=document.getElementById('wnext'),D=document.getElementById('wdots'),T=document.getElementById('wtitle'),cards=[],dots=[],cur=0,pos=0,dr=null;
   function sg(){return document.documentElement.dir==='rtl'?-1:1} function cl(v){return Math.max(0,Math.min(W.length-1,v))}
   function placeholder(w){var p=document.createElement('div'),a=document.createElement('b'),z=document.createElement('bdi');p.className='wpl';p.setAttribute('role','img');p.setAttribute('aria-label',w.title);a.textContent=w.title.toUpperCase();z.dataset.t='soon';z.textContent='COMING SOON';p.appendChild(a);p.appendChild(z);return p}
-  function renderData(list){W=(Array.isArray(list)&&list.length?list:MARVEN_FALLBACK.wallpapers).map(function(w,i){return{id:w.id||i+1,image:w.image_url||w.image||'',ver:w.updated_at||w.ver||'',title:w.title||('Wallpaper_0'+(i+1))}});S.innerHTML='<div class="wsh" aria-hidden="true"></div><div class="wfr" aria-hidden="true"><i class="isl"></i><i class="wb" style="left:-12px;top:14%;height:4%"></i><i class="wb" style="left:-12px;top:21%;height:8%"></i><i class="wb" style="left:-12px;top:31%;height:8%"></i><i class="wb" style="right:-12px;top:26%;height:13%"></i></div>';D.innerHTML='';cards=[];dots=[];cur=Math.min(cur,Math.max(0,W.length-1));pos=cur;
-    W.forEach(function(w,i){var c=document.createElement('div');c.className='wc';if(validURL(w.image)){var im=new Image();im.alt=w.title;im.draggable=false;im.loading='lazy';im.onerror=function(){if(im.parentNode===c)c.replaceChild(placeholder(w),im)};im.src=mvBust(w.image,w.ver);c.appendChild(im);mvFade(im,c)}else c.appendChild(placeholder(w));S.appendChild(c);cards.push(c);var d=document.createElement('button');d.className='wd';d.setAttribute('aria-label',(i+1)+' / '+W.length);d.onclick=function(){go(i)};D.appendChild(d);dots.push(d)});render(1)}
+  function renderData(list){W=(Array.isArray(list)&&list.length?list:MARVEN_FALLBACK.wallpapers).map(function(w,i){return{id:w.id||i+1,image:w.image_url||w.image||'',title:w.title||('Wallpaper_0'+(i+1))}});S.innerHTML='<div class="wsh" aria-hidden="true"></div><div class="wfr" aria-hidden="true"><i class="isl"></i><i class="wb" style="left:-12px;top:14%;height:4%"></i><i class="wb" style="left:-12px;top:21%;height:8%"></i><i class="wb" style="left:-12px;top:31%;height:8%"></i><i class="wb" style="right:-12px;top:26%;height:13%"></i></div>';D.innerHTML='';cards=[];dots=[];cur=Math.min(cur,Math.max(0,W.length-1));pos=cur;
+    W.forEach(function(w,i){var c=document.createElement('div');c.className='wc';if(validURL(w.image)){var im=new Image();im.alt=w.title;im.draggable=false;im.loading='lazy';im.onerror=function(){if(im.parentNode===c)c.replaceChild(placeholder(w),im)};im.src=w.image;c.appendChild(im)}else c.appendChild(placeholder(w));S.appendChild(c);cards.push(c);var d=document.createElement('button');d.className='wd';d.setAttribute('aria-label',(i+1)+' / '+W.length);d.onclick=function(){go(i)};D.appendChild(d);dots.push(d)});render(1)}
   function render(instant){if(!cards.length){T.textContent='';return}if(instant)S.classList.add('drag');var sw=cards[0].offsetWidth,g=sg();cards.forEach(function(c,i){var o=i-pos,a=Math.abs(o),sn=o<0?-1:1,x,s,op;if(a<=1){x=o*sw*.92*g;s=1-.2*a;op=1-.5*a}else{x=sn*g*(sw*.92+(a-1)*sw*.62);s=Math.max(.5,.8-.16*(a-1));op=Math.max(0,.5-.3*(a-1))}c.style.transform='translateX('+x+'px) scale('+s+')';c.style.opacity=op;c.style.zIndex=10-Math.round(a);c.setAttribute('aria-hidden',i!==cur)});P.setAttribute('aria-disabled',cur===0);N.setAttribute('aria-disabled',cur===W.length-1);dots.forEach(function(d,i){if(i===cur)d.setAttribute('aria-current','true');else d.removeAttribute('aria-current')});T.textContent=W[cur].title.toUpperCase();if(instant)requestAnimationFrame(function(){requestAnimationFrame(function(){if(!dr)S.classList.remove('drag')})})}
   function go(i){if(!W.length)return;cur=cl(i);pos=cur;S.classList.remove('drag');render()}
   P.onclick=function(){go(cur-1)};N.onclick=function(){go(cur+1)};S.addEventListener('keydown',function(e){if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;e.preventDefault();var d=e.key==='ArrowRight'?1:-1;go(cur+d*sg())});S.addEventListener('pointerdown',function(e){if(e.button>0)return;dr={x:e.clientX,p:pos,id:e.pointerId};S.classList.add('drag');try{S.setPointerCapture(e.pointerId)}catch(_){} });S.addEventListener('pointermove',function(e){if(!dr)return;var dx=e.clientX-dr.x;pos=Math.max(0,Math.min(W.length-1,dr.p-dx*sg()/(cards[0].offsetWidth*.92)));cur=Math.round(pos);render()});function end(e){if(!dr)return;var dx=(e.clientX-dr.x)*sg(),p=dr.p;dr=null;go(Math.abs(dx)>40?(dx<0?cl(Math.round(p)+1):cl(Math.round(p)-1)):Math.round(p))}S.addEventListener('pointerup',end);S.addEventListener('pointercancel',end);addEventListener('resize',function(){render(1)});window.wRender=function(){render(1)};renderData(W);
@@ -602,7 +582,7 @@ renderGifters(gifters);
 })();
 
 function renderHosts(list){
-  var row=document.querySelector('.hrow');if(!row)return;row.innerHTML='';(Array.isArray(list)&&list.length?list:MARVEN_FALLBACK.hosts).forEach(function(h){var a=document.createElement('article');a.className='hcard';var f=document.createElement('div');f.className='hface';f.setAttribute('role','img');f.setAttribute('aria-label',h.name||'Host');var meta=document.createElement('div');meta.className='hmeta';var b=document.createElement('b');b.textContent=h.name||'HOST';var span=document.createElement('span');span.textContent='@tba';var em=document.createElement('em');em.dataset.t='soon';em.textContent='COMING SOON';meta.appendChild(b);meta.appendChild(span);meta.appendChild(em);if(validURL(h.image_url||h.image)){var im=new Image();im.alt=h.name||'Host';im.loading='lazy';im.style.width='100%';im.style.height='100%';im.style.objectFit='cover';im.onerror=function(){im.remove()};im.src=mvBust(h.image_url||h.image,h.updated_at);f.appendChild(im);mvFade(im,f)}else{f.innerHTML='<svg viewBox="0 0 60 60" width="60" height="60" aria-hidden="true"><circle cx="30" cy="30" r="14" fill="none" stroke="currentColor" stroke-width=".8"/><path d="M30 6v10M30 44v10M6 30h10M44 30h10" stroke="currentColor" stroke-width=".8"/></svg>'}a.appendChild(f);a.appendChild(meta);row.appendChild(a)})}
+  var row=document.querySelector('.hrow');if(!row)return;row.innerHTML='';(Array.isArray(list)&&list.length?list:MARVEN_FALLBACK.hosts).forEach(function(h){var a=document.createElement('article');a.className='hcard';var f=document.createElement('div');f.className='hface';f.setAttribute('role','img');f.setAttribute('aria-label',h.name||'Host');var meta=document.createElement('div');meta.className='hmeta';var b=document.createElement('b');b.textContent=h.name||'HOST';var span=document.createElement('span');span.textContent='@tba';var em=document.createElement('em');em.dataset.t='soon';em.textContent='COMING SOON';meta.appendChild(b);meta.appendChild(span);meta.appendChild(em);if(validURL(h.image_url||h.image)){var im=new Image();im.alt=h.name||'Host';im.loading='lazy';im.style.width='100%';im.style.height='100%';im.style.objectFit='cover';im.onerror=function(){im.remove()};im.src=h.image_url||h.image;f.appendChild(im)}else{f.innerHTML='<svg viewBox="0 0 60 60" width="60" height="60" aria-hidden="true"><circle cx="30" cy="30" r="14" fill="none" stroke="currentColor" stroke-width=".8"/><path d="M30 6v10M30 44v10M6 30h10M44 30h10" stroke="currentColor" stroke-width=".8"/></svg>'}a.appendChild(f);a.appendChild(meta);row.appendChild(a)})}
 renderHosts(MARVEN_FALLBACK.hosts);
 
 var maya= {name:'MAYA',username:MARVEN_FALLBACK.content['maya.username'],profileImage:MARVEN_FALLBACK.content['maya.profile_image'],heroImage:MARVEN_FALLBACK.content['maya.hero_image'],tiktokProfile:MARVEN_FALLBACK.content['maya.tiktok_profile'],tiktokDM:MARVEN_FALLBACK.content['maya.tiktok_dm'],status:'ONLINE',role:'ASSISTANT',systemId:'MAYA_001'};
@@ -621,29 +601,21 @@ function applyContact(c){var email=c['contact.email']||MARVEN_FALLBACK.content['
 }
 applyContact(MARVEN_FALLBACK.content);
 
-var MARVEN_SITE_CONTENT=Object.assign({},MARVEN_FALLBACK.content),MARVEN_SITE_VER={};
+var MARVEN_SITE_CONTENT=Object.assign({},MARVEN_FALLBACK.content);
 /* ---- 8 extra Supabase site_content keys (maya.bio + 7 image keys). Empty/missing/broken -> original hardcoded look is kept. ---- */
 function applyNewKeys(c){
   try{
     var okURL=function(u){u=(u||'').trim();return /^(https?:\/\/|data:image\/|\/)/i.test(u)?u.replace(/"/g,'%22'):''};
-    /* image slot (.crop / .aimg / .moonp): shimmer while loading (hides the old default), then an <img> fades in over it.
-       Original inline style is saved and restored if the key is emptied; a failed URL keeps the original look (no broken icon). */
-    var setBox=function(el,raw,key){
+    /* image set on a .crop-style element via background-image; original inline style is saved and restored if the key is emptied or the URL fails to load */
+    var setCrop=function(el,raw){
       if(!el)return;
       if(el._mvOrig===undefined)el._mvOrig=el.getAttribute('style');
-      var u0=okURL(raw),u=u0?mvBust(u0,MARVEN_SITE_VER[key]):'';el._mvWant=u;
-      var imgs=function(){return Array.prototype.filter.call(el.children,function(n){return n.classList&&n.classList.contains('mvcimg')})};
-      var cur=imgs();
-      if(!u){cur.forEach(function(n){n.remove()});el.classList.remove('mv-sk','mv-has');if(el._mvOrig===null)el.removeAttribute('style');else el.setAttribute('style',el._mvOrig);return}
-      if(cur.some(function(n){return n.getAttribute('data-u')===u}))return;
-      if(!cur.length)el.classList.add('mv-sk');
-      var im=new Image();im.className='mvcimg mv-fx';im.alt='';im.draggable=false;im.decoding='async';im.setAttribute('data-u',u);
-      im.onload=function(){
-        if(el._mvWant!==u)return;
-        el.style.position='relative';el.style.overflow='hidden';
-        el.classList.add('mv-has');el.appendChild(im);void im.offsetWidth;im.classList.add('mv-in');
-        setTimeout(function(){if(el._mvWant!==u)return;imgs().forEach(function(n){if(n!==im)n.remove()});el.classList.remove('mv-sk')},450)};
-      im.onerror=function(){if(el._mvWant!==u)return;if(!imgs().length)el.classList.remove('mv-sk','mv-has')};
+      var u=okURL(raw);el._mvWant=u;
+      if(!u){if(el._mvUrl){if(el._mvOrig===null)el.removeAttribute('style');else el.setAttribute('style',el._mvOrig);el._mvUrl=''}return}
+      if(el._mvUrl===u)return;
+      var im=new Image();
+      im.onload=function(){if(el._mvWant!==u)return;el.style.backgroundImage='url("'+u+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.style.backgroundRepeat='no-repeat';el._mvUrl=u};
+      im.onerror=function(){if(el._mvWant!==u)return;if(el._mvUrl){if(el._mvOrig===null)el.removeAttribute('style');else el.setAttribute('style',el._mvOrig);el._mvUrl=''}};
       im.src=u;
     };
     /* maya.bio */
@@ -653,12 +625,19 @@ function applyNewKeys(c){
       else if(bio.dataset.mvBio){delete bio.dataset.mvBio;var L=I18N[document.documentElement.lang]||I18N.en;if(L&&L.mDesc!=null)bio.innerHTML=L.mDesc}}
     /* editing_system cards: helmet, gloves, suit, footwear */
     var crops=document.querySelectorAll('.parts .part .crop');
-    ['editing_system.helmet_image','editing_system.gloves_image','editing_system.suit_image','editing_system.footwear_image'].forEach(function(k,i){setBox(crops[i],c[k],k)});
+    ['editing_system.helmet_image','editing_system.gloves_image','editing_system.suit_image','editing_system.footwear_image'].forEach(function(k,i){setCrop(crops[i],c[k])});
     /* about.character_image and marven_info.profile_image */
-    setBox(document.querySelector('.aimg'),c['about.character_image'],'about.character_image');
-    setBox(document.querySelector('.info .crop'),c['marven_info.profile_image'],'marven_info.profile_image');
-    /* ideas_visuals.image_url -> .moonp */
-    setBox(document.querySelector('.moonp'),c['ideas_visuals.image_url'],'ideas_visuals.image_url');
+    setCrop(document.querySelector('.aimg'),c['about.character_image']);
+    setCrop(document.querySelector('.info .crop'),c['marven_info.profile_image']);
+    /* ideas_visuals.image_url -> <img> inside .moonp, vector hidden only once the image has loaded */
+    var mp=document.querySelector('.moonp');
+    if(mp){var rock=mp.querySelector('.rock'),u2=okURL(c['ideas_visuals.image_url']),cur=mp.querySelector('img.mvimg');mp._mvWant=u2;
+      var clear=function(){if(cur)cur.remove();if(rock)rock.style.display=''};
+      if(!u2)clear();
+      else if(!(cur&&cur.getAttribute('src')===u2)){var im2=new Image();
+        im2.onload=function(){if(mp._mvWant!==u2)return;var o=mp.querySelector('img.mvimg');if(o)o.remove();im2.className='mvimg';im2.alt='';im2.draggable=false;im2.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block';mp.appendChild(im2);if(rock)rock.style.display='none'};
+        im2.onerror=function(){};
+        im2.src=u2}}
   }catch(e){}
 }
 function applySiteContent(){var c=MARVEN_SITE_CONTENT,stmt=document.querySelector('.hero .stmt');/* disabled */maya.username=c['maya.username']||MARVEN_FALLBACK.content['maya.username'];maya.profileImage=c['maya.profile_image']||MARVEN_FALLBACK.content['maya.profile_image'];maya.heroImage=c['maya.hero_image']||MARVEN_FALLBACK.content['maya.hero_image'];maya.tiktokProfile=c['maya.tiktok_profile']||MARVEN_FALLBACK.content['maya.tiktok_profile'];maya.tiktokDM=c['maya.tiktok_dm']||MARVEN_FALLBACK.content['maya.tiktok_dm'];applyMaya();applyContact(c);applyNewKeys(c)}
@@ -671,24 +650,14 @@ window.marvenDynamicApply=applySiteContent;
     try{var api=window.SpinRollAPI;if(api&&typeof api.getClient==='function'){var c=api.getClient();if(c)return c}}catch(e){}
     try{if(ownClient)return ownClient;var cfg=window.SPINROLL_CONFIG;if(window.supabase&&cfg&&cfg.url&&cfg.anonKey){ownClient=window.supabase.createClient(cfg.url,cfg.anonKey);return ownClient}}catch(e){}
     return null}
-  /* localStorage cache: painted instantly on load (before Supabase answers); fresh data re-paints only if it differs */
-  var CK='marven_site_content',lastSig=null;
-  function readCache(){try{var j=JSON.parse(localStorage.getItem(CK)||'null');return j&&j.v===1&&j.data?j:null}catch(e){return null}}
-  function writeCache(d){try{localStorage.setItem(CK,JSON.stringify({v:1,t:Date.now(),data:d}))}catch(e){}}
-  function paint(d){var rows=d.content||[];MARVEN_SITE_CONTENT=Object.assign({},MARVEN_FALLBACK.content);MARVEN_SITE_VER={};
-    rows.forEach(function(x){var k=String(x.section||'')+'.'+String(x.key||'');MARVEN_SITE_CONTENT[k]=x.value==null?'':String(x.value);MARVEN_SITE_VER[k]=x.updated_at||''});
-    renderGifters(d.gifters||[]);renderHosts(d.hosts||[]);if(window.marvenRenderWallpapers)window.marvenRenderWallpapers(d.wallpapers||[]);applySiteContent()}
   function loadAll(){var sb=client();if(!sb)return Promise.reject(new Error('shared Supabase client unavailable'));return Promise.all([
     sb.from('gifters').select('id,name,image_url,is_active,display_order,updated_at').order('display_order',{ascending:true}),
     sb.from('hosts').select('id,name,image_url,display_order,updated_at').order('display_order',{ascending:true}),
     sb.from('wallpapers').select('id,title,image_url,display_order,updated_at').order('display_order',{ascending:true}),
     sb.from('site_content').select('section,key,value,type,updated_at').order('section',{ascending:true}).order('key',{ascending:true})
-  ]).then(function(rs){rs.forEach(function(r){if(r.error)throw r.error});
-    var d={gifters:rs[0].data||[],hosts:rs[1].data||[],wallpapers:rs[2].data||[],content:rs[3].data||[]},sig=JSON.stringify(d);
-    if(sig===lastSig)return;lastSig=sig;writeCache(d);paint(d)})}
+  ]).then(function(rs){rs.forEach(function(r){if(r.error)throw r.error});var rows=rs[3].data||[];MARVEN_SITE_CONTENT=Object.assign({},MARVEN_FALLBACK.content);rows.forEach(function(x){MARVEN_SITE_CONTENT[String(x.section||'')+'.'+String(x.key||'')]=x.value==null?'':String(x.value)});renderGifters(rs[0].data||[]);renderHosts(rs[1].data||[]);if(window.marvenRenderWallpapers)window.marvenRenderWallpapers(rs[2].data||[]);applySiteContent()})}
   function subscribe(){var sb=client();if(!sb||rtChannel)return;try{rtChannel=sb.channel('marven-site-content');['gifters','hosts','wallpapers','site_content'].forEach(function(table){rtChannel.on('postgres_changes',{event:'*',schema:'public',table:table},function(){loadAll().catch(function(){})})});rtChannel.subscribe()}catch(e){rtChannel=null}}
   function init(){loadAll().then(subscribe).catch(function(e){console.warn('[marven-content] Supabase unavailable; using hardcoded fallback.',e)})}
-  (function(){var j=readCache();if(j){try{lastSig=JSON.stringify(j.data);paint(j.data)}catch(e){lastSig=null}}})();
   document.addEventListener('DOMContentLoaded',init);
   window.marvenContentReload=loadAll;
 })();
