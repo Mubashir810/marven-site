@@ -1,0 +1,18 @@
+# MARVEN
+
+> MARVEN is a futuristic mystery video editor creating cinematic TikTok edits, creator reels, LIVE host edits, and promotional videos.
+
+## Core Pages
+
+- [Home](https://marven.de5.net/): The main website with all information about MARVEN, including the editing system, wallpapers, Maya, and live signals.
+- [Contact](https://marven.de5.net/#contact): How to get in touch with MARVEN for collaborations.
+
+## About
+
+- [TikTok](https://www.tiktok.com/@marveneditz): Official TikTok account for MARVEN.
+
+## Maya (System Assistant)
+
+- Maya is MARVEN's AI assistant.
+- She answers editing questions, handles collaborations, and passes messages directly to MARVEN.
+- TikTok Account: [@maya.marven](https://www.tiktok.com/@maya.marven)
