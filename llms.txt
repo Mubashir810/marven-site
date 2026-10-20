@@ -1,0 +1,12 @@
+# MARVEN
+
+> MARVEN is a futuristic mystery video editor creating cinematic TikTok edits, creator reels, LIVE host edits, and promotional videos.
+
+## Core Pages
+
+- [Home](https://marven.de5.net/): The main website with all information about MARVEN, including the editing system, wallpapers,Maya, and live signals.
+- [Contact](https://marven.de5.net/#contact): How to get in touch with MARVEN for collaborations.
+
+## About
+
+- [TikTok](https://www.tiktok.com/@marveneditz): Official TikTok account for MARVEN.
